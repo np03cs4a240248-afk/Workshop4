@@ -1,21 +1,18 @@
 <?php
-// ----------- STEP 1: CREATE VARIABLES TO STORE ERRORS AND SUCCESS MESSAGE ------------ //
 $nameErr = $emailErr = $passErr = $confirmErr = "";
 $successMsg = "";
 $name = $email = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // ----------- STEP 2: VALIDATION ------------ //
 
-    // Name validation
     if (empty($_POST["name"])) {
         $nameErr = "Name is required";
     } else {
         $name = htmlspecialchars($_POST["name"]);
     }
 
-    // Email validation
+
     if (empty($_POST["email"])) {
         $emailErr = "Email is required";
     } else {
@@ -25,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Password validation
     if (empty($_POST["password"])) {
         $passErr = "Password is required";
     } else {
@@ -37,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Confirm password validation
+
     if (empty($_POST["confirm_password"])) {
         $confirmErr = "Confirm password is required";
     } else {
@@ -48,10 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // If NO errors → process data
+
     if ($nameErr == "" && $emailErr == "" && $passErr == "" && $confirmErr == "") {
 
-        // ----------- STEP 3: READ JSON FILE ------------ //
         $file = "users.json";
 
         if (!file_exists($file)) {
@@ -64,20 +59,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $users = [];
             }
 
-            // ----------- STEP 4: HASH PASSWORD ------------ //
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // ----------- STEP 5: CREATE NEW USER ------------ //
             $newUser = [
                 "name" => $name,
                 "email" => $email,
                 "password" => $hashedPassword
             ];
 
-            // Add user to array
             $users[] = $newUser;
 
-            // ----------- STEP 6: WRITE BACK TO JSON ------------ //
             if (file_put_contents($file, json_encode($users, JSON_PRETTY_PRINT))) {
                 $successMsg = "Registration successful!";
             } else {
@@ -89,26 +80,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 
-<!-- ----------- STEP 7: HTML FORM ------------ -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>User Registration</title>
     <style>
         body {
-            text-align: center;
+            text-align: left;
             font-family: Arial;
             padding: 20px;
 
-            /* NEW — centers the form box */
+
             display: flex;
-            justify-content: center;
+
             align-items: center;
 
             height: 100vh; /* full screen height */
         }
 
-        .error { color: red; font-size: 14px; }
+        .error { color: darkred; font-size: 14px; }
         .success { color: green; font-size: 16px; margin-bottom: 10px; }
 
         .form-box {
@@ -116,9 +106,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 10px;
-
-            /* optional — add slight shadow */
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         label { font-weight: bold; }
@@ -135,6 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 10px;
             background: #4CAF50;
             color: white;
+            background-color: blue;
             border: none;
         }
     </style>
